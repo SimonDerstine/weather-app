@@ -7,6 +7,7 @@ const sun = document.querySelector('.sun');
 const clouds = document.querySelectorAll('.cloud');
 const rainContainer = document.querySelector('.rain-container');
 const snowContainer = document.querySelector('.snow-container');
+let map = null;
 
 // Add click event to button
 searchBtn.addEventListener('click', getWeather);
@@ -65,6 +66,8 @@ function displayWeather(data) {
             <p> Wind Speed: ${windSpeed} mph</p>
         </div>
     `;
+
+    showMap(data.coord.lat, data.coord.lon, cityName);
 }
 
 // Update background animation based on weather
@@ -120,5 +123,35 @@ function createSnow() {
         flake.style.animationDelay = Math.random() * 2 + 's';
         flake.style.opacity = Math.random();
         snowContainer.appendChild(flake);
+    }
+}
+
+// Show map with city location
+function showMap(lat, lon, cityName) {
+    const mapDiv = document.getElementById('map');
+    mapDiv.style.display = 'block';
+    
+    // If map already exists, just update it
+    if (map !== null) {
+        map.setView([lat, lon], 10);
+        map.eachLayer(layer => {
+            if (layer instanceof L.Marker) {
+                map.removeLayer(layer);
+            }
+        });
+        L.marker([lat, lon]).addTo(map)
+            .bindPopup(`<b>${cityName}</b>`)
+            .openPopup();
+    } else {
+        // Create new map first time
+        map = L.map('map').setView([lat, lon], 10);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+        
+        L.marker([lat, lon]).addTo(map)
+            .bindPopup(`<b>${cityName}</b>`)
+            .openPopup();
     }
 }
