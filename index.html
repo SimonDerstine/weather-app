@@ -4,105 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather App</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to bottom, #4facfe, #00f2fe);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .container {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            max-width: 500px;
-            width: 100%;
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 30px;
-        }
-
-        .search-box {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-        }
-
-        input {
-            flex: 1;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #4facfe;
-        }
-
-        button {
-            padding: 12px 24px;
-            background: #4facfe;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        button:hover {
-            background: #3a8fd9;
-        }
-
-        #weather-result {
-            text-align: center;
-            color: #555;
-            font-size: 18px;
-        }
-
-        .weather-info {
-            margin-top: 20px;
-        }
-
-        .weather-info h2 {
-            color: #333;
-            margin-bottom: 15px;
-        }
-
-        .weather-info p {
-            margin: 10px 0;
-            font-size: 18px;
-        }
-
-        .temp {
-            font-size: 48px;
-            font-weight: bold;
-            color: #4facfe;
-        }
-
-        .error {
-            color: #ff4444;
-            font-weight: bold;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Weather animations -->
+    <div class="sun"></div>
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+    <div class="rain-container"></div>
+    <div class="snow-container"></div>
+
     <div class="container">
         <h1>Weather App</h1>
         
@@ -116,76 +27,7 @@
         </div>
     </div>
 
-    <!-- This is the javascript code -->
     <script src="config.js"></script>
-    <script>
-        
-        // Get elements
-        const searchBtn = document.getElementById('search-btn');
-        const cityInput = document.getElementById('city-input');
-        const weatherResult = document.getElementById('weather-result');
-
-        // Add click event to button
-        searchBtn.addEventListener('click', getWeather);
-
-        // Also allow Enter key to search
-        cityInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                getWeather();
-            }
-        });
-
-        // Main function to fetch weather
-        function getWeather() {
-            const city = cityInput.value.trim();
-            
-            // Check if city is entered
-            if (city === '') {
-                weatherResult.innerHTML = '<p class="error">Please enter a city name!</p>';
-                return;
-            }
-
-            // Show loading message
-            weatherResult.innerHTML = '<p>Loading...</p>';
-
-            // Build the API URL
-            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=imperial`;
-
-            // Make the API call
-            fetch(url)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('City not found');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    displayWeather(data);
-                })
-                .catch(error => {
-                    weatherResult.innerHTML = '<p class="error">City not found. Please try again!</p>';
-                    console.error('Error:', error);
-                });
-        }
-
-        // Display the weather data
-        function displayWeather(data) {
-            const temp = Math.round(data.main.temp);
-            const description = data.weather[0].description;
-            const humidity = data.main.humidity;
-            const windSpeed = data.wind.speed;
-            const cityName = data.name;
-
-            weatherResult.innerHTML = `
-                <div class="weather-info">
-                    <h2>${cityName}</h2>
-                    <p class="temp">${temp}°F</p>
-                    <p>${description}</p>
-                    <p>Humidity: ${humidity}%</p>
-                    <p>Wind Speed: ${windSpeed} mph</p>
-                </div>
-            `;
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>

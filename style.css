@@ -1,0 +1,275 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: background 1s ease;
+}
+
+/* Background states */
+body.clear {
+    background: linear-gradient(to bottom, #87CEEB, #FDB813);
+}
+
+body.clouds {
+    background: linear-gradient(to bottom, #606c88, #3f4c6b);
+}
+
+body.rain {
+    background: linear-gradient(to bottom, #2c3e50, #4ca1af);
+}
+
+body.snow {
+    background: linear-gradient(to bottom, #E0E0E0, #FFFFFF);
+}
+
+/* Sun rays animation */
+.sun {
+    position: absolute;
+    top: 10%;
+    right: 15%;
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, #FDB813 0%, #FDB813 40%, transparent 70%);
+    border-radius: 50%;
+    animation: pulse 3s ease-in-out infinite;
+    display: none;
+}
+
+.sun::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(
+        transparent 0deg,
+        rgba(253, 184, 19, 0.3) 10deg,
+        transparent 20deg,
+        rgba(253, 184, 19, 0.3) 30deg,
+        transparent 40deg,
+        rgba(253, 184, 19, 0.3) 50deg,
+        transparent 60deg,
+        rgba(253, 184, 19, 0.3) 70deg,
+        transparent 80deg
+    );
+    animation: rotate 20s linear infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+@keyframes rotate {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Cloud animation */
+.cloud {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 100px;
+    display: none;
+}
+
+.cloud::before,
+.cloud::after {
+    content: '';
+    position: absolute;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 100px;
+}
+
+.cloud1 {
+    width: 100px;
+    height: 40px;
+    top: 20%;
+    animation: float 15s ease-in-out infinite;
+}
+
+.cloud1::before {
+    width: 50px;
+    height: 50px;
+    top: -25px;
+    left: 10px;
+}
+
+.cloud1::after {
+    width: 60px;
+    height: 40px;
+    top: -15px;
+    right: 10px;
+}
+
+.cloud2 {
+    width: 120px;
+    height: 50px;
+    top: 40%;
+    animation: float 20s ease-in-out infinite 5s;
+}
+
+.cloud2::before {
+    width: 60px;
+    height: 60px;
+    top: -30px;
+    left: 15px;
+}
+
+.cloud2::after {
+    width: 70px;
+    height: 50px;
+    top: -20px;
+    right: 15px;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateX(-200px); }
+    50% { transform: translateX(calc(100vw + 200px)); }
+}
+
+/* Rain animation */
+.rain-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    overflow: hidden;
+}
+
+.raindrop {
+    position: absolute;
+    width: 2px;
+    height: 50px;
+    background: linear-gradient(transparent, rgba(255, 255, 255, 0.6));
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(100vh);
+    }
+}
+
+/* Snow animation */
+.snow-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    overflow: hidden;
+}
+
+.snowflake {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: white;
+    border-radius: 50%;
+    animation: snowfall linear infinite;
+}
+
+@keyframes snowfall {
+    to {
+        transform: translateY(100vh) rotate(360deg);
+    }
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    width: 100%;
+    z-index: 10;
+    backdrop-filter: blur(10px);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.search-box {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+input {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+input:focus {
+    outline: none;
+    border-color: #4facfe;
+}
+
+button {
+    padding: 12px 24px;
+    background: #4facfe;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #3a8fd9;
+}
+
+#weather-result {
+    text-align: center;
+    color: #555;
+    font-size: 18px;
+}
+
+.weather-info {
+    margin-top: 20px;
+}
+
+.weather-info h2 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.weather-info p {
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+.temp {
+    font-size: 48px;
+    font-weight: bold;
+    color: #4facfe;
+}
+
+.error {
+    color: #ff4444;
+    font-weight: bold;
+}
