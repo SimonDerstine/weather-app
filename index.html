@@ -104,7 +104,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>🌤️ Weather App</h1>
+        <h1>Weather App</h1>
         
         <div class="search-box">
             <input type="text" id="city-input" placeholder="Enter city name...">
@@ -116,9 +116,77 @@
         </div>
     </div>
 
+    <!-- This is the javascript code -->
     <script>
-        // Your JavaScript code will go here!
-        console.log('Weather app loaded!');
+        // API key lives here
+        const API_KEY = 'API KEY GOES HERE';
+        
+        // Get elements
+        const searchBtn = document.getElementById('search-btn');
+        const cityInput = document.getElementById('city-input');
+        const weatherResult = document.getElementById('weather-result');
+
+        // Add click event to button
+        searchBtn.addEventListener('click', getWeather);
+
+        // Also allow Enter key to search
+        cityInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                getWeather();
+            }
+        });
+
+        // Main function to fetch weather
+        function getWeather() {
+            const city = cityInput.value.trim();
+            
+            // Check if city is entered
+            if (city === '') {
+                weatherResult.innerHTML = '<p class="error">Please enter a city name!</p>';
+                return;
+            }
+
+            // Show loading message
+            weatherResult.innerHTML = '<p>Loading...</p>';
+
+            // Build the API URL
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=imperial`;
+
+            // Make the API call
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('City not found');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    displayWeather(data);
+                })
+                .catch(error => {
+                    weatherResult.innerHTML = '<p class="error">City not found. Please try again!</p>';
+                    console.error('Error:', error);
+                });
+        }
+
+        // Display the weather data
+        function displayWeather(data) {
+            const temp = Math.round(data.main.temp);
+            const description = data.weather[0].description;
+            const humidity = data.main.humidity;
+            const windSpeed = data.wind.speed;
+            const cityName = data.name;
+
+            weatherResult.innerHTML = `
+                <div class="weather-info">
+                    <h2>${cityName}</h2>
+                    <p class="temp">${temp}°F</p>
+                    <p>${description}</p>
+                    <p>💧 Humidity: ${humidity}%</p>
+                    <p>💨 Wind Speed: ${windSpeed} mph</p>
+                </div>
+            `;
+        }
     </script>
 </body>
 </html>
